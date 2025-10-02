@@ -7,6 +7,9 @@ import { User } from "src/user/entities/user.entity";
 import { Repository } from "typeorm";
 import { CreateProductImageDto } from "src/product-image/dto/create-product-image.dto";
 import { UpdateProductDto } from "./dto/update-product.dto";
+import cloudinary from 'src/common/cloudinary/cloudinary.config';
+
+
 
 @Injectable()
 export class ProductsService {
@@ -24,13 +27,22 @@ export class ProductsService {
     return this.productRepo.save(product);
   }
 
-  async addImage(productId: number, dto: CreateProductImageDto) {
-    const product = await this.productRepo.findOneBy({ id: productId });
-    if (!product) throw new NotFoundException('Product not found');
+  async addImage(productId: number, file: Express.Multer.File) {
+  const product = await this.productRepo.findOneBy({ id: productId });
+  if (!product) throw new NotFoundException('Product not found');
 
-    const image = this.imageRepo.create({ ...dto, product });
-    return this.imageRepo.save(image);
-  }
+  // Upload to Cloudinary
+  const result = await cloudinary.uploader.upload(file.path, {
+    folder: 'products',
+  });
+
+  const image = this.imageRepo.create({
+    images: result.secure_url, // Cloudinary URL
+    product,
+  });
+
+  return this.imageRepo.save(image);
+}
 
   async updateProduct(id: number, dto: UpdateProductDto) {
     const product = await this.productRepo.findOneBy({ id });

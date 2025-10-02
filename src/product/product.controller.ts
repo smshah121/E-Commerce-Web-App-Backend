@@ -29,24 +29,19 @@ export class ProductsController {
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN)
-   @Post(':id/images')
-  @UseInterceptors(FileInterceptor('file', {
-    storage: diskStorage({
-      destination: './uploads/product-images',
-      filename: (req, file, cb) => {
-        const uniqueName = `${uuidv4()}${path.extname(file.originalname)}`;
-        cb(null, uniqueName);
-      },
-    }),
-  }))
-  async uploadImage(
-    @Param('id', ParseIntPipe) id: number,
-    @UploadedFile() file: Express.Multer.File,
-  ) {
-    const imagePath = `/uploads/product-images/${file.filename}`;
-    return this.productsService.addImage(id, {productId: id, images: [imagePath] });
-  }
+@Roles(UserRole.ADMIN)
+@Post(':id/images')
+@UseInterceptors(FileInterceptor('file'))
+async uploadImage(
+  @Param('id', ParseIntPipe) id: number,
+  @UploadedFile() file: Express.Multer.File,
+) {
+  if (!file) throw new NotFoundException('No file uploaded');
+  
+  // Pass the file to service for Cloudinary upload
+  return this.productsService.addImage(id, file);
+}
+
 
   @UseGuards(JwtAuthGuard, RolesGuard)
 @Roles(UserRole.ADMIN)
