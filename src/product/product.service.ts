@@ -37,7 +37,7 @@ export class ProductsService {
   });
 
   const image = this.imageRepo.create({
-    images: result.secure_url, // Cloudinary URL
+    image: result.secure_url, // Cloudinary URL
     product,
   });
 

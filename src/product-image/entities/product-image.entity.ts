@@ -7,8 +7,9 @@ export class ProductImage {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column("text", { array: true, nullable: true })
-  images: string;
+  
+  @Column()
+  image: string;
 
   @Column({ nullable: true })
   altText: string;
