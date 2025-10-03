@@ -9,6 +9,8 @@ import { CreateProductImageDto } from "src/product-image/dto/create-product-imag
 import { UpdateProductDto } from "./dto/update-product.dto";
 import cloudinary from 'src/common/cloudinary/cloudinary.config';
 
+import streamifier from 'streamifier';
+
 
 
 @Injectable()
@@ -31,17 +33,29 @@ export class ProductsService {
   const product = await this.productRepo.findOneBy({ id: productId });
   if (!product) throw new NotFoundException('Product not found');
 
-  // Upload to Cloudinary
-  const result = await cloudinary.uploader.upload(file.path, {
-    folder: 'products',
-  });
+  return new Promise(async (resolve, reject) => {
+    try {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        { folder: 'products' },
+        async (error, result) => {
+          if (error) return reject(error);
+          if (!result?.secure_url) return reject(new Error('Cloudinary upload failed'));
 
-  const image = this.imageRepo.create({
-    image: result.secure_url, // Cloudinary URL
-    product,
-  });
+          const image = this.imageRepo.create({
+            image: result.secure_url,
+            product,
+          });
+          const savedImage = await this.imageRepo.save(image);
+          resolve(savedImage);
+        }
+      );
 
-  return this.imageRepo.save(image);
+      // Convert buffer to readable stream and pipe to Cloudinary
+      streamifier.createReadStream(file.buffer).pipe(uploadStream);
+    } catch (err) {
+      reject(err);
+    }
+  });
 }
 
   async updateProduct(id: number, dto: UpdateProductDto) {
