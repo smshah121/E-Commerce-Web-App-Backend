@@ -11,7 +11,9 @@ async function bootstrap() {
         enableImplicitConversion: true, // converts string to number, boolean, etc.
       },}))
   app.enableCors({
-    origin: "*"
+     origin: [
+    "https://dynamic-griffin-d0c7fd.netlify.app", // your frontend domain
+  ],
   })
   
   
