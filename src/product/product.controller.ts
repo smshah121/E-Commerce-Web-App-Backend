@@ -6,15 +6,16 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { Request } from 'express';
 import { Roles } from 'src/common/decorators/roles.decorators';
 import { RolesGuard } from 'src/common/guards/role.guard';
-import { CreateProductImageDto } from 'src/product-image/dto/create-product-image.dto';
+
 import { JwtAuthGuard } from 'src/auth/guards/jwt-guard';
 import { ProductsService } from './product.service';
 import { UserRole } from 'src/common/enums/user-role.enum';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { FileFieldsInterceptor, FileInterceptor } from '@nestjs/platform-express';
-import * as path from 'path';
-import { diskStorage } from 'multer';
-import { v4 as uuidv4 } from 'uuid';
+import {  FileInterceptor } from '@nestjs/platform-express';
+
+
+
+import { memoryStorage } from 'multer';
 
 @Controller('products')
 export class ProductsController {
@@ -31,7 +32,12 @@ export class ProductsController {
   @UseGuards(JwtAuthGuard, RolesGuard)
 @Roles(UserRole.ADMIN)
 @Post(':id/images')
-@UseInterceptors(FileInterceptor('file'))
+@UseInterceptors(
+  FileInterceptor('file', {
+    storage: memoryStorage(), // store file in memory
+    limits: { fileSize: 10 * 1024 * 1024 }, // optional: max 10MB
+  }),
+)
 async uploadImage(
   @Param('id', ParseIntPipe) id: number,
   @UploadedFile() file: Express.Multer.File,
