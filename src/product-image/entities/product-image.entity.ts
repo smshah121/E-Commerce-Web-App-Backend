@@ -8,7 +8,7 @@ export class ProductImage {
   id: number;
 
   
-  @Column()
+  @Column({ nullable: true })
   image: string;
 
   @Column({ nullable: true })
