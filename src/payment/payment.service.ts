@@ -30,8 +30,8 @@ export class PaymentService {
       metadata: {
       orderId: orderId.toString(),
     },
-      success_url: 'https://e-commerce-web-app-backend-1s1s.onrender.com/payment-success',
-      cancel_url: 'https://e-commerce-web-app-backend-1s1s.onrender.com/payment-cancel',
+      success_url: 'https://dynamic-griffin-d0c7fd.netlify.app/payment-success',
+      cancel_url: 'https://dynamic-griffin-d0c7fd.netlify.app/payment-cancel',
     });
     return session;
   }
