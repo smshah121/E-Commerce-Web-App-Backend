@@ -14,6 +14,7 @@ import { ProductImage } from './product-image/entities/product-image.entity';
 import { Order } from './order/entities/order.entity';
 import { OrderItem } from './order-item/entities/order-item.entity';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { PaymentModule } from './payment/payment.module';
 
 @Module({
   imports: [
@@ -40,7 +41,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     OrderModule,
     ProductModule,
     ProductImageModule,
-    OrderItemModule
+    OrderItemModule,
+    PaymentModule
   ],
   controllers: [AppController],
   providers: [AppService],
