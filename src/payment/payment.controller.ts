@@ -1,4 +1,4 @@
-import Stripe from 'stripe';
+const Stripe = require('stripe');
 import { Request } from 'express';
 import { Controller, Post, Req, Headers, Body, UseGuards } from '@nestjs/common';
 import { PaymentService } from './payment.service';

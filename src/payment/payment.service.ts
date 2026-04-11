@@ -1,6 +1,6 @@
 // payment.service.ts
 import { Injectable } from '@nestjs/common';
-import Stripe from 'stripe';
+const Stripe = require('stripe');
 
 @Injectable()
 export class PaymentService {
