@@ -6,14 +6,14 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 @Entity()
 export class OrderItem {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column()
-  quantity: number;
+  quantity!: number;
 
   @ManyToOne(() => Order, order => order.items, { onDelete: 'CASCADE' })
-  order: Order;
+  order!: Order;
 
   @ManyToOne(() => Product, product => product.orderItems, { onDelete: 'CASCADE' })
-  product: Product;
+  product!: Product;
 }

@@ -6,26 +6,26 @@ import { OrderItem } from 'src/order-item/entities/order-item.entity';
 @Entity()
 export class Product {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column()
-  name: string;
+  name!: string;
 
   @Column()
-  description: string;
+  description!: string;
 
   @Column()
-  price: number;
+  price!: number;
 
   @Column({ nullable: true })
-  stock: number;
+  stock!: number;
 
   @ManyToOne(() => User, user => user.products, { onDelete: 'SET NULL', eager: true })
-  admin: User;
+  admin!: User;
 
   @OneToMany(() => ProductImage, image => image.product, { cascade: true , eager: true })
-  images: ProductImage[];
+  images!: ProductImage[];
 
   @OneToMany(() => OrderItem, item => item.product)
-  orderItems: OrderItem[];
+  orderItems!: OrderItem[];
 }
