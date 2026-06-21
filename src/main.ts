@@ -17,7 +17,7 @@ async function bootstrap() {
     }),
   );
   app.enableCors({
-    origin: ['https://dynamic-griffin-d0c7fd.netlify.app'],
+    origin: ['https://pricetag-tech.netlify.app'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true, // allows cookies/auth headers
     allowedHeaders: 'Content-Type, Accept, Authorization',
