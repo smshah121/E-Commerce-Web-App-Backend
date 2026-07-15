@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import * as bcrypt from "bcrypt"
+import {UserRole} from "src/common/enums/user-role.enum"
 
 
 
@@ -19,7 +20,8 @@ export class UserService {
     const user = this.userRepository.create({
       ...createUserDto,
       email: createUserDto.email.toLowerCase(),
-      password: hashedPassword
+      password: hashedPassword,
+      role:UserRole.CUSTOMER
     })
     return this.userRepository.save(user)
   }

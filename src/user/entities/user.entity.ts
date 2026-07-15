@@ -5,23 +5,23 @@ import { Order } from 'src/order/entities/order.entity';
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column()
-  name: string;
+  name!: string;
 
   @Column({ unique: true })
-  email: string;
+  email!: string;
 
   @Column()
-  password: string;
+  password!: string;
 
   @Column({ type: 'enum', enum: UserRole })
-  role: UserRole;
+  role!: UserRole;
 
   @OneToMany(() => Product, product => product.admin)
-  products: Product[];
+  products!: Product[];
 
   @OneToMany(() => Order, order => order.customer)
-  orders: Order[];
+  orders!: Order[];
 }
