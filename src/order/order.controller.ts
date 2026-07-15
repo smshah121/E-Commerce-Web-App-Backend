@@ -20,7 +20,7 @@ export class OrderController {
     return this.orderService.createOrder(createOrderDto, user.id);
   }
   @UseGuards(RolesGuard,JwtAuthGuard)
-@Roles(UserRole.ADMIN)
+@Roles(UserRole.SELLER)
 @Get('admin')
 getOrdersForAdmin(@Req() req: Request) {
   const user = req.user as any;
@@ -36,7 +36,7 @@ getOrdersForAdmin(@Req() req: Request) {
 
   @Get()
   @UseGuards(RolesGuard)
-  @Roles(UserRole.ADMIN)
+  @Roles(UserRole.SELLER)
   getAllOrders() {
     return this.orderService.findAll();
   }
@@ -53,7 +53,7 @@ getOrdersForAdmin(@Req() req: Request) {
 
   @Patch('/:id/status')
   @UseGuards(RolesGuard)
-  @Roles(UserRole.ADMIN)
+  @Roles(UserRole.SELLER)
   updateOrderStatus(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateOrderStatusDto) {
     return this.orderService.updateStatus(id, dto.status);
   }

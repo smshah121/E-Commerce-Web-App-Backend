@@ -22,7 +22,7 @@ export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN)
+  @Roles(UserRole.SELLER)
   @Post()
   create(@Body() dto: CreateProductDto, @Req() req: Request) {
     const user = req.user as any;
@@ -30,7 +30,7 @@ export class ProductsController {
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-@Roles(UserRole.ADMIN)
+@Roles(UserRole.SELLER)
 @Post(':id/images')
 @UseInterceptors(
   FileInterceptor('file', {
@@ -50,7 +50,7 @@ async uploadImage(
 
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-@Roles(UserRole.ADMIN)
+@Roles(UserRole.SELLER)
 @Get('my')
 getMyProducts(@Req() req: Request) {
   const user = req.user as any;
@@ -69,21 +69,21 @@ getMyProducts(@Req() req: Request) {
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN)
+  @Roles(UserRole.SELLER)
   @Patch(':id')
   update(@Param('id',  ParseIntPipe) id: number, @Body() dto: UpdateProductDto) {
     return this.productsService.updateProduct(id, dto);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN)
+  @Roles(UserRole.SELLER)
   @Delete(':id')
   delete(@Param('id', ParseIntPipe) id: number) {
     return this.productsService.deleteProduct(id);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN)
+  @Roles(UserRole.SELLER)
   @Delete('images/:imageId')
   deleteImage(@Param('imageId', ParseIntPipe) imageId: number) {
     return this.productsService.deleteImage(imageId);

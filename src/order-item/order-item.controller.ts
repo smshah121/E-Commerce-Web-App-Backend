@@ -13,7 +13,7 @@ export class OrderItemController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('/buyers/:productId')
 
-@Roles(UserRole.ADMIN)
+@Roles(UserRole.SELLER)
 getBuyers(@Param('productId') productId: number) {
   return this.orderItemService.getBuyersByProduct(+productId);
 }
