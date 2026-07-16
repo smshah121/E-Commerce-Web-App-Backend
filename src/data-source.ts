@@ -6,6 +6,7 @@ import { Product } from './product/entities/product.entity';
 import { ProductImage } from './product-image/entities/product-image.entity';
 import { OrderItem } from './order-item/entities/order-item.entity';
 import { Order } from './order/entities/order.entity';
+import { SellerApplication } from './seller-application/entities/seller-application.entity';
 
 
 dotenv.config();
@@ -17,7 +18,7 @@ export const AppDataSource = new DataSource({
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  entities: [User, Product, ProductImage, OrderItem, Order],
+  entities: [User, Product, ProductImage,SellerApplication, OrderItem, Order],
   migrations: ["src/migrations/*.ts"],
   ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false,
   synchronize: false,

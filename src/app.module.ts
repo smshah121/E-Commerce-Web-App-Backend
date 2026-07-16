@@ -15,6 +15,8 @@ import { Order } from './order/entities/order.entity';
 import { OrderItem } from './order-item/entities/order-item.entity';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PaymentModule } from './payment/payment.module';
+import { SellerApplicationModule } from './seller-application/seller-application.module';
+import { SellerApplication } from './seller-application/entities/seller-application.entity';
 
 @Module({
   imports: [
@@ -31,7 +33,7 @@ import { PaymentModule } from './payment/payment.module';
         username: config.get<string>('DB_USERNAME'),
         password: config.get<string>('DB_PASSWORD'),
         database: config.get<string>('DB_NAME'),
-        entities: [User, Product, Order, ProductImage, OrderItem],
+        entities: [User, Product, Order, ProductImage,SellerApplication, OrderItem],
         synchronize: false,
         ssl: config.get<string>('DB_SSL') === 'true' ? { rejectUnauthorized: false } : false,
       }),
@@ -42,7 +44,8 @@ import { PaymentModule } from './payment/payment.module';
     ProductModule,
     ProductImageModule,
     OrderItemModule,
-    PaymentModule
+    PaymentModule,
+    SellerApplicationModule
   ],
   controllers: [AppController],
   providers: [AppService],

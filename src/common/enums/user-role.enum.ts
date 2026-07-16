@@ -1,4 +1,6 @@
+/* eslint-disable prettier/prettier */
 export enum UserRole {
-    SELLER = "seller",
-    CUSTOMER = "customer"
+    ADMIN = "admin",
+    CUSTOMER = "customer",
+    SELLER = "seller"
 }
