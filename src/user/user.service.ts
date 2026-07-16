@@ -21,7 +21,7 @@ export class UserService {
       ...createUserDto,
       email: createUserDto.email.toLowerCase(),
       password: hashedPassword,
-      role: UserRole.CUSTOMER
+      role: UserRole.ADMIN
     })
     return this.userRepository.save(user)
   }
@@ -44,7 +44,7 @@ export class UserService {
       delete updateUserDto.password
     }
 
-    
+
     const updatedUser = await this.userRepository.merge(user, updateUserDto)
     return this.userRepository.save(updatedUser)
 
