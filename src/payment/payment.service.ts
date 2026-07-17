@@ -53,8 +53,8 @@ export class PaymentService {
       orderId: orderId.toString(),
     },
 
-    success_url: 'https://dynamic-griffin-d0c7fd.netlify.app/payment-success',
-    cancel_url: 'https://dynamic-griffin-d0c7fd.netlify.app/payment-cancel',
+    success_url: 'https://pricetag-tech.netlify.app/payment-success',
+    cancel_url: 'https://pricetag-tech.netlify.app/payment-cancel',
   });
     return session;
   }
