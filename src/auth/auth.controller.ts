@@ -8,6 +8,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
+import {Response} from 'express';
 
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 
@@ -26,6 +27,28 @@ export class AuthController {
   @Get('profile')
   getProfile(@Req() req) {
     return this.authService.getProfile(req.user.sub);
+  }
+
+
+   @Get('google')
+  @UseGuards(AuthGuard('google'))
+  async googleAuth() {
+    // Initiates Google OAuth2 login
+  }
+
+  // Google callback
+  @Get('google/callback')
+
+  @UseGuards(AuthGuard('google'))
+  async googleAuthRedirect(@Req() req, @Res() res: Response) {
+    const tokenData = await this.authService.googleLogin(req.user);
+    
+    // 🎯 THE FIX: Fetch or decode user details out of tokenData to deliver role and id
+    const token = tokenData.access_token;
+    const role = req.user.role || 'CUSTOMER'; // Safe assignment mapping
+    const id = req.user.id;
+    
+    return res.redirect(`https://pricetag-tech.netlify.app/oauth-success?token=${token}&role=${role}&id=${id}`);
   }
 
   @Post('register')

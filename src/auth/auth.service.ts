@@ -32,6 +32,37 @@ export class AuthService {
       role: user.role,
     };
   }
+
+
+  async googleLogin(googleUser: { email: string; name: string }): Promise<{ access_token: string; id: number }> {
+  // 1. Check if user exists
+  let user = await this.userService.findByEmail(googleUser.email);
+
+  // 2. If not, create user
+  if (!user) {
+    user = await this.userService.create({
+      name: googleUser.name,
+      email: googleUser.email,
+      password: ''
+    });
+  } else if (!user.name) {
+    // 3. If user exists but name is missing, update it
+    user = await this.userService.update(user.id, { name: googleUser.name });
+  }
+
+  if (!user) throw new Error("Unable to create or find Google user");
+
+  // 4. Generate JWT
+  const payload = { 
+    username: user.email,
+     sub: user.id,
+     role: user.role,    
+    };
+  return {
+    access_token: this.jwtService.sign(payload),
+    id: user.id,
+  };
+}
   async getProfile(id: number): Promise<User> {
     const user = await this.userService.findById(id);
     return user;
