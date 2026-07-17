@@ -14,6 +14,7 @@ import { CreateUserDto } from 'src/user/dto/create-user.dto';
 
 import { LocalAuthGuard } from './guards/local-guard';
 import { JwtAuthGuard } from './guards/jwt-guard';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('auth')
 export class AuthController {
