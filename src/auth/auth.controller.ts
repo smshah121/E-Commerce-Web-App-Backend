@@ -16,6 +16,7 @@ import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { LocalAuthGuard } from './guards/local-guard';
 import { JwtAuthGuard } from './guards/jwt-guard';
 import { AuthGuard } from '@nestjs/passport';
+import { Public } from 'src/common/decorators/public-decorators';
 
 @Controller('auth')
 export class AuthController {
@@ -40,7 +41,7 @@ export class AuthController {
 
   // Google callback
   @Get('google/callback')
-
+   @Public()
   @UseGuards(AuthGuard('google'))
   async googleAuthRedirect(@Req() req, @Res() res: Response) {
     const tokenData = await this.authService.googleLogin(req.user);

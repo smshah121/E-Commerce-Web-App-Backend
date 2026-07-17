@@ -53,16 +53,14 @@ export class AuthService {
   if (!user) throw new Error("Unable to create or find Google user");
 
   // 4. Generate JWT
-  const payload = { 
-    username: user.email,
-     sub: user.id,
-  
-    };
+  const payload = { username: user.email, sub: user.id };
   return {
     access_token: this.jwtService.sign(payload),
     id: user.id,
   };
 }
+
+
   async getProfile(id: number): Promise<User> {
     const user = await this.userService.findById(id);
     return user;
