@@ -7,7 +7,7 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-guard';
 import { Roles } from 'src/common/decorators/roles.decorators';
 import { UserRole } from 'src/common/enums/user-role.enum';
 import { RolesGuard } from 'src/common/guards/role.guard';
-import { UpdateOrderStatusDto } from './dto/update-order.dto';
+import { UpdateOrderStatusDto, UpdatePaymentStatusDto } from './dto/update-order.dto';
 
 @Controller('orders')
 @UseGuards(JwtAuthGuard)
@@ -57,4 +57,15 @@ getOrdersForAdmin(@Req() req: Request) {
   updateOrderStatus(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateOrderStatusDto) {
     return this.orderService.updateStatus(id, dto.status);
   }
+
+  @Patch('/:id/payment-status')
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.SELLER)
+  updatePaymentStatus(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: UpdatePaymentStatusDto,
+  ) {
+    return this.orderService.updatePaymentStatus(id, dto.paymentStatus);
+  }
+
 }

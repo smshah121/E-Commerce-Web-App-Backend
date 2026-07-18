@@ -1,5 +1,6 @@
 // src/order/dto/update-order-status.dto.ts
 import { IsEnum } from 'class-validator';
+import { PaymentStatus } from 'src/common/enums/payment-status.enum';
 
 export enum OrderStatus {
   PENDING = 'PENDING',
@@ -12,4 +13,9 @@ export enum OrderStatus {
 export class UpdateOrderStatusDto {
   @IsEnum(OrderStatus)
   status!: OrderStatus;
+}
+
+export class UpdatePaymentStatusDto {
+  @IsEnum(PaymentStatus)
+  paymentStatus!: PaymentStatus;
 }
