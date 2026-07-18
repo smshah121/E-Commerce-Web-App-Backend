@@ -17,14 +17,14 @@ import { LocalAuthGuard } from './guards/local-guard';
 import { JwtAuthGuard } from './guards/jwt-guard';
 import { AuthGuard } from '@nestjs/passport';
 import { Public } from 'src/common/decorators/public-decorators';
-import { UserService } from 'src/user/user.service';
+
 
 @Controller('auth')
 export class AuthController {
   constructor
   (
     private authService: AuthService,
-    private userService: UserService
+
 
   ) {}
   @UseGuards(LocalAuthGuard)
@@ -53,11 +53,9 @@ async googleAuthRedirect(@Req() req, @Res() res: Response) {
 
     const tokenData = await this.authService.googleLogin(req.user);
 
-    const user = await this.userService.findByEmail(req.user.email);
-
-    return res.redirect(
-      `https://pricetag-tech.netlify.app/oauth-success?token=${tokenData.access_token}&role=${user.role}&id=${user.id}`
-    );
+return res.redirect(
+  `https://pricetag-tech.netlify.app/oauth-success?token=${tokenData.access_token}&role=${tokenData.role}&id=${tokenData.id}`,
+);
 }
 
   @Post('register')
