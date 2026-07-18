@@ -8,6 +8,8 @@ import { User } from "src/user/entities/user.entity";
 import { CreateOrderDto } from "./dto/create-order.dto";
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { OrderStatus } from "./dto/update-order.dto";
+import { PaymentStatus } from "src/common/enums/payment-status.enum";
+import { PaymentMethod } from "src/common/enums/payment-method.enum";
 
 @Injectable()
 export class OrdersService {
@@ -22,7 +24,7 @@ export class OrdersService {
     const user = await this.userRepo.findOneBy({ id: userId });
     if (!user) throw new NotFoundException('User not found');
 
-    const { items, address, subtotal, shipping, tax, total } = dto;
+    const { items, address, subtotal, shipping, tax, total,paymentMethod } = dto;
 
     const order = this.orderRepo.create({
       customer: user,
@@ -37,6 +39,12 @@ export class OrdersService {
       total,
       status: OrderStatus.PENDING,
       orderedAt: new Date(),
+      paymentMethod: paymentMethod ?? PaymentMethod.COD,
+
+      paymentStatus:
+        paymentMethod === PaymentMethod.ONLINE
+          ? PaymentStatus.PAID
+          : PaymentStatus.PENDING,
     });
 
     const savedOrder = await this.orderRepo.save(order);
@@ -61,6 +69,25 @@ export class OrdersService {
       relations: ['items', 'items.product', 'customer'],
     });
   }
+
+
+  async updatePaymentStatus(
+  orderId: number,
+  paymentStatus: PaymentStatus,
+) {
+  const order = await this.orderRepo.findOne({
+    where: { id: orderId },
+  });
+
+  if (!order) {
+    throw new NotFoundException('Order not found');
+  }
+
+  order.paymentStatus = paymentStatus;
+
+  return this.orderRepo.save(order);
+}
+
   async findOrdersByAdmin(adminId: number) {
   return this.orderRepo
     .createQueryBuilder('order')
@@ -81,12 +108,7 @@ export class OrdersService {
     });
   }
 
-  async updateStatus(orderId: number, status: OrderStatus) {
-    const order = await this.orderRepo.findOne({ where: { id: orderId } });
-    if (!order) throw new NotFoundException('Order not found');
-    order.status = status;
-    return this.orderRepo.save(order);
-  }
+
 
   async findOne(id: number, userId: number) {
     const order = await this.orderRepo.findOne({

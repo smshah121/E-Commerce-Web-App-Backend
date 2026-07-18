@@ -1,68 +1,74 @@
 // src/order/dto/create-order.dto.ts
-import { IsArray, IsNotEmpty, ValidateNested, IsString, IsNumber } from 'class-validator';
+import { IsArray, IsNotEmpty, ValidateNested, IsString, IsNumber, IsEnum } from 'class-validator';
 import { Type } from 'class-transformer';
+import { PaymentMethod } from 'src/common/enums/payment-method.enum';
 
 // This remains the same, defining what an item looks like in the input
 export class OrderItemInput {
   @IsNumber()
   @IsNotEmpty()
-  productId: number;
+  productId!: number;
 
   @IsNumber()
   @IsNotEmpty()
-  quantity: number;
+  quantity!: number;
 }
 
 // New DTO for the Address part of the order
 export class AddressInput {
   @IsString()
   @IsNotEmpty()
-  street: string;
+  street!: string;
 
   @IsString()
   @IsNotEmpty()
-  city: string;
+  city!: string;
 
   @IsString()
   @IsNotEmpty()
-  state: string;
+  state!: string;
 
   @IsString()
   @IsNotEmpty()
-  postalCode: string;
+  postalCode!: string;
 
   @IsString()
   @IsNotEmpty()
-  country: string;
+  country!: string;
 }
+
 
 // The main CreateOrderDto, now including address and financial details
 export class CreateOrderDto {
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => OrderItemInput)
-  items: OrderItemInput[];
+  items!: OrderItemInput[];
 
   @ValidateNested()
   @Type(() => AddressInput)
   @IsNotEmpty()
-  address: AddressInput; // Nested address object
+  address!: AddressInput; // Nested address object
 
   @IsNumber()
   @IsNotEmpty()
-  subtotal: number;
+  subtotal!: number;
 
   @IsNumber()
   @IsNotEmpty()
-  shipping: number;
+  shipping!: number;
 
   @IsNumber()
   @IsNotEmpty()
-  tax: number;
+  tax!: number;
 
   @IsNumber()
   @IsNotEmpty()
-  total: number;
+  total!: number;
+
+
+  @IsEnum(PaymentMethod)
+  paymentMethod!: PaymentMethod;
 
   // Status and orderedAt are handled by the entity's defaults/CreateDateColumn
   // customerId is derived from the authenticated user, not part of the DTO payload

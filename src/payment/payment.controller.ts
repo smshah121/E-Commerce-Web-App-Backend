@@ -8,6 +8,7 @@ import { Roles } from 'src/common/decorators/roles.decorators';
 import { UserRole } from 'src/common/enums/user-role.enum';
 import { OrderStatus } from 'src/order/dto/update-order.dto';
 import { OrdersService } from 'src/order/order.service';
+import { PaymentStatus } from 'src/common/enums/payment-status.enum';
 
 @Controller('payment')
 export class PaymentController {
@@ -56,9 +57,9 @@ async createCheckoutSession(@Body() body: any) {
   console.log('Payment successful for order:', orderId);
 
   if (orderId) {
-    await this.orderService.updateStatus(
+    await this.orderService.updatePaymentStatus(
       Number(orderId),
-      OrderStatus.PAID,
+      PaymentStatus.PAID
     );
   }
       

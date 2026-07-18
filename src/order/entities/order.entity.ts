@@ -8,51 +8,67 @@ import {
 import { User } from 'src/user/entities/user.entity';
 import { OrderItem } from 'src/order-item/entities/order-item.entity';
 import { OrderStatus } from '../dto/update-order.dto';
+import { PaymentStatus } from 'src/common/enums/payment-status.enum';
+import { PaymentMethod } from 'src/common/enums/payment-method.enum';
 
 @Entity('order')
 export class Order {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column({ type: 'timestamp with time zone', default: () => 'CURRENT_TIMESTAMP' })
-  orderedAt: Date;
+  orderedAt!: Date;
 
   @Column({ default: OrderStatus.PENDING })
-  status: OrderStatus;
+  status!: OrderStatus;
+
+  @Column({
+  type: 'enum',
+  enum: PaymentMethod,
+  default: PaymentMethod.COD,
+})
+paymentMethod!: PaymentMethod;
+
+@Column({
+  type: 'enum',
+  enum: PaymentStatus,
+  default: PaymentStatus.PENDING,
+})
+paymentStatus!: PaymentStatus;
 
   // Shipping Address Details
   @Column()
-  street: string;
+  street!: string;
 
   @Column()
-  city: string;
+  city!: string;
 
   @Column()
-  state: string;
+  state!: string;
 
   @Column()
-  postalCode: string;
+  postalCode!: string;
 
   @Column()
-  country: string;
+  country!: string;
 
   // Price Details
   @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
-  subtotal: number;
+  subtotal!: number;
 
   @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
-  shipping: number;
+  shipping!: number;
 
   @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
-  tax: number;
+  tax!: number;
 
   @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
-  total: number;
+  total!: number;
 
   // Relationships
   @ManyToOne(() => User, (user) => user.orders, { nullable: true })
-  customer: User;
+  customer!: User;
 
   @OneToMany(() => OrderItem, (orderItem) => orderItem.order, { cascade: true })
-  items: OrderItem[];
+  items!: OrderItem[];
 }
