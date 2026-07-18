@@ -108,7 +108,12 @@ export class OrdersService {
     });
   }
 
-
+  async updateStatus(orderId: number, status: OrderStatus) {
+    const order = await this.orderRepo.findOne({ where: { id: orderId } });
+    if (!order) throw new NotFoundException('Order not found');
+    order.status = status;
+    return this.orderRepo.save(order);
+  }
 
   async findOne(id: number, userId: number) {
     const order = await this.orderRepo.findOne({
