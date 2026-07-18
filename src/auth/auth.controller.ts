@@ -17,10 +17,16 @@ import { LocalAuthGuard } from './guards/local-guard';
 import { JwtAuthGuard } from './guards/jwt-guard';
 import { AuthGuard } from '@nestjs/passport';
 import { Public } from 'src/common/decorators/public-decorators';
+import { UserService } from 'src/user/user.service';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor
+  (
+    private authService: AuthService,
+    private userService: UserService
+
+  ) {}
   @UseGuards(LocalAuthGuard)
   @Post('login')
   async login(@Request() req) {
@@ -41,18 +47,18 @@ export class AuthController {
 
   // Google callback
   @Get('google/callback')
-   @Public()
-  @UseGuards(AuthGuard('google'))
-  async googleAuthRedirect(@Req() req, @Res() res: Response) {
+@Public()
+@UseGuards(AuthGuard('google'))
+async googleAuthRedirect(@Req() req, @Res() res: Response) {
+
     const tokenData = await this.authService.googleLogin(req.user);
-    
-    // 🎯 THE FIX: Fetch or decode user details out of tokenData to deliver role and id
-    const token = tokenData.access_token;
-    const role = req.user.role || 'CUSTOMER'; // Safe assignment mapping
-    const id = req.user.id;
-    
-    return res.redirect(`https://pricetag-tech.netlify.app/oauth-success?token=${token}&role=${role}&id=${id}`);
-  }
+
+    const user = await this.userService.findByEmail(req.user.email);
+
+    return res.redirect(
+      `https://pricetag-tech.netlify.app/oauth-success?token=${tokenData.access_token}&role=${user.role}&id=${user.id}`
+    );
+}
 
   @Post('register')
   async register(@Body() createUserDto: CreateUserDto) {
