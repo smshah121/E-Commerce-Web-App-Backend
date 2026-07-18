@@ -4,6 +4,7 @@ import { UserService } from 'src/user/user.service';
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { User } from 'src/user/entities/user.entity';
+import { UserRole } from 'src/common/enums/user-role.enum';
 
 @Injectable()
 export class AuthService {
@@ -34,7 +35,7 @@ export class AuthService {
   }
 
 
-  async googleLogin(googleUser: { email: string; name: string }): Promise<{ access_token: string; id: number }> {
+  async googleLogin(googleUser: { email: string; name: string }): Promise<{ access_token: string; id: number, role: UserRole }> {
   // 1. Check if user exists
   let user = await this.userService.findByEmail(googleUser.email);
 
@@ -53,10 +54,11 @@ export class AuthService {
   if (!user) throw new Error("Unable to create or find Google user");
 
   // 4. Generate JWT
-  const payload = { username: user.email, sub: user.id };
+  const payload = { username: user.email, sub: user.id, role:user.role };
   return {
     access_token: this.jwtService.sign(payload),
     id: user.id,
+    role: user.role,
   };
 }
 
