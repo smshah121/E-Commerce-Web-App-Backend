@@ -6,7 +6,7 @@ import { OrderItem } from "src/order-item/entities/order-item.entity";
 import { Product } from "src/product/entities/product.entity";
 import { User } from "src/user/entities/user.entity";
 import { CreateOrderDto } from "./dto/create-order.dto";
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { OrderStatus } from "./dto/update-order.dto";
 import { PaymentStatus } from "src/common/enums/payment-status.enum";
 import { PaymentMethod } from "src/common/enums/payment-method.enum";
@@ -81,6 +81,12 @@ export class OrdersService {
 
   if (!order) {
     throw new NotFoundException('Order not found');
+  }
+
+  if (order.paymentMethod !== PaymentMethod.COD) {
+    throw new BadRequestException(
+      'Payment status can only be updated for COD orders.',
+    );
   }
 
   order.paymentStatus = paymentStatus;
