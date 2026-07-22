@@ -82,7 +82,8 @@ export class ProductsService {
   }
 
   async findAll() {
-    return this.productRepo.find({ relations: ['images'] });
+    return this.productRepo.find({ relations: ['images', 'seller',
+      'seller.sellerApplication'] });
   }
 
   async findOne(id: number) {
