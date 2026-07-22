@@ -54,8 +54,8 @@ async uploadImage(
 @Get('my')
 getMyProducts(@Req() req: Request) {
   const user = req.user as any;
-  console.log('Current admin ID from token:', user.sub);
-  return this.productsService.findByAdmin(user.sub);
+  console.log('Current seller ID from token:', user.sub);
+  return this.productsService.findBySeller(user.sub);
 }
 
   @Get()

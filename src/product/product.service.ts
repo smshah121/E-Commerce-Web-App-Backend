@@ -22,11 +22,11 @@ export class ProductsService {
     @InjectRepository(User) private userRepo: Repository<User>
   ) {}
 
-  async createProduct(dto: CreateProductDto, adminId: number) {
-    const admin = await this.userRepo.findOneBy({ id: adminId });
-    if (!admin) throw new NotFoundException('Admin not found');
+  async createProduct(dto: CreateProductDto, sellerId: number) {
+    const seller = await this.userRepo.findOneBy({ id: sellerId });
+    if (!seller) throw new NotFoundException('Seller not found');
 
-    const product = this.productRepo.create({ ...dto, admin });
+    const product = this.productRepo.create({ ...dto, seller });
     return this.productRepo.save(product);
   }
 
@@ -89,11 +89,11 @@ export class ProductsService {
     return this.productRepo.findOne({ where: { id }, relations: ['images'] });
   }
 
-  async findByAdmin(adminId: number) {
-  console.log('Fetching products for admin ID:', adminId);
+  async findBySeller(sellerId: number) {
+  console.log('Fetching products for seller ID:', sellerId);
   const products = await this.productRepo.find({
-    where: { admin: { id: adminId } },
-    relations: ['images', 'admin'],
+    where: { seller: { id: sellerId } },
+    relations: ['images', 'seller'],
     order: { id: 'DESC' },
   });
   console.log('Products found:', products.length);

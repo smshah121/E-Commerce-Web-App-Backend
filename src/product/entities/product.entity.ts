@@ -21,7 +21,7 @@ export class Product {
   stock!: number;
 
   @ManyToOne(() => User, user => user.products, { onDelete: 'SET NULL', eager: true })
-  admin!: User;
+  seller!: User;
 
   @OneToMany(() => ProductImage, image => image.product, { cascade: true , eager: true })
   images!: ProductImage[];
