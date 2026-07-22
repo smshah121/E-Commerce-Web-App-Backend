@@ -21,10 +21,10 @@ export class OrderController {
   }
   @UseGuards(RolesGuard,JwtAuthGuard)
 @Roles(UserRole.SELLER)
-@Get('admin')
-getOrdersForAdmin(@Req() req: Request) {
+@Get('seller')
+getOrdersForSeller(@Req() req: Request) {
   const user = req.user as any;
-  return this.orderService.findOrdersByAdmin(user.sub); // sub = admin ID
+  return this.orderService.findOrdersBySeller(user.sub); // sub = seller ID
 }
 
 

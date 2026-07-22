@@ -94,14 +94,14 @@ export class OrdersService {
   return this.orderRepo.save(order);
 }
 
-  async findOrdersByAdmin(adminId: number) {
+  async findOrdersBySeller(sellerId: number) {
   return this.orderRepo
     .createQueryBuilder('order')
     .leftJoinAndSelect('order.customer', 'customer')
     .leftJoinAndSelect('order.items', 'orderItem')
 
     .leftJoinAndSelect('orderItem.product', 'product')
-    .where('product.adminId = :adminId', { adminId })
+    .where('product.sellerId = :sellerId', { sellerId })
     .getMany();
 }
 
