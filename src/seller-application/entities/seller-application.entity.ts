@@ -16,11 +16,11 @@ export class SellerApplication {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @OneToOne(() => User, {
-    onDelete: 'CASCADE',
-  })
-  @JoinColumn()
-  user!: User;
+  @OneToOne(() => User, user => user.sellerApplication, {
+  onDelete: 'CASCADE',
+})
+@JoinColumn()
+user!: User;
 
   @Column({
     length: 100,
