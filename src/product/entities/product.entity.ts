@@ -14,8 +14,12 @@ export class Product {
   @Column()
   description!: string;
 
-  @Column()
-  price!: number;
+  @Column({
+  type: 'numeric',
+  precision: 10,
+  scale: 2,
+})
+price!: number;
 
   @Column({ nullable: true })
   stock!: number;
