@@ -21,7 +21,7 @@ export class UserService {
       ...createUserDto,
       email: createUserDto.email.toLowerCase(),
       password: hashedPassword,
-      role: UserRole.ADMIN
+      role: UserRole.CUSTOMER
     })
     return this.userRepository.save(user)
   }
