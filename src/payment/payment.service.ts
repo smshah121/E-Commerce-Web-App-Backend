@@ -31,7 +31,7 @@ export class PaymentService {
   // 2️⃣ Convert to Stripe line items
   const line_items = order.items.map((item) => ({
     price_data: {
-      currency: 'usd',
+      currency: 'pkr',
       product_data: {
         name: item.product.name,
         images: item.product.images?.length
